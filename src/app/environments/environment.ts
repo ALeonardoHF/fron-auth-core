@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:8080'
+    apiUrl: 'https://portafoliowebback-hdbcesacgnbeh8f6.westus3-01.azurewebsites.net'
 };
