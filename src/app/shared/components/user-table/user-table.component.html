@@ -1,0 +1,22 @@
+<table>
+  <thead>
+    <ng-content select="[table-header]" />
+  </thead>
+  <tbody>
+    @for (user of users(); track user.id) {
+      <tr (click)="onSelect(user)" style="cursor:pointer">
+        @if (rowTemplate()) {
+          <ng-container *ngTemplateOutlet="rowTemplate()!; context: { $implicit: user}" />
+        } @else {
+          <td>{{ user.email }}</td>
+          <td>{{ user.role | roleLabel }}</td>
+          <td>{{ user.isActive ? 'Activo' : 'Inactivo' }}</td>
+        }
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="3">No se encontraron usuarios</td>
+      </tr>
+    }
+  </tbody>
+</table>

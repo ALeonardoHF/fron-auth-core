@@ -1,0 +1,24 @@
+<div class="container">
+  <h2>Recuperar acceso</h2>
+  @if (sent()) {
+    <p>Revisa tu correo. Si el email existe, recibirás un enlace de recuperación.</p>
+    <a routerLink="/auth/login">Volver al login</a>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field">
+        <label>Email de tu cuenta</label>
+        <input type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <span class="error">Email inválido</span>
+        }
+      </div>
+      @if (errorMsg()) {
+        <p class="error">{{ errorMsg() }}</p>
+      }
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Enviando...' : 'Enviar enlace de recuperación' }}
+      </button>
+    </form>
+    <p><a routerLink="/auth/login">Volver al login</a></p>
+  }
+</div>

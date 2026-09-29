@@ -1,0 +1,48 @@
+<div class="container">
+    <h2>Crear cuenta</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="field">
+            <label>Email</label>
+            <input type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+            @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <span class="error">Email inválido</span>
+            }
+        </div>
+
+        <div class="field">
+            <label>Contraseña</label>
+            <input type="password" formControlName="password" placeholder="********" />
+            @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <span class="error">Mínimo 8 caracteres</span>
+            }
+        </div>
+
+        <div class="field">
+            <label>Confirmar contraseña</label>
+            <input type="password" formControlName="confirmPassword" placeholder="********" />
+            @if (form.errors?.['passwordsMismatch'] && form.get('confirmPassword')?.touched) {
+            <span class="error">Las contraseñas no coinciden</span>
+            }
+        </div>
+
+        <div class="field">
+            <label>Rol</label>
+            <select formControlName="role">
+                <option [ngValue]="3">Cliente</option>
+                <option [ngValue]="1">Admin</option>
+            </select>
+        </div>
+
+        @if (errorMsg()) {
+        <p class="error">{{ errorMsg() }}</p>
+        }
+
+        <button type="submit" [appLoadingButton]="loading()">
+            {{ loading() ? 'Registrando...' : 'Registrarse' }}
+        </button>
+
+    </form>
+
+    <p>¿Ya tienes cuenta? <a routerLink="/auth/login">Inicia sesión</a></p>
+</div>

@@ -1,0 +1,58 @@
+<div class="container wide">
+    <h2>Usuarios</h2>
+    <a routerLink="/dashboard">← Volver</a>
+
+    <div class="filters-card">
+        <input type="text" [(ngModel)]="templateSearch" name="templateSearch"
+            (ngModelChange)="searchTerm.set($event)"
+            placeholder="Filtro rápido..." />
+        <input type="text" [formControl]="searchControl" placeholder="Buscar por rol..." />
+    </div>
+
+
+    @if (loading()) {
+    <p>Cargando usuarios...</p>
+    } @else if (errorMsg()) {
+    <p class="error">{{ errorMsg() }}</p>
+    } @else {
+
+    <ng-template #customRow let-user>
+        <td>{{ user.email }}</td>
+        <td><strong>{{ user.role | roleLabel }}</strong></td>
+        <td [style.color]="user.isActive ? 'green' : 'red'">
+            {{ user.isActive ? 'Activo' : 'Inactivo' }}
+        </td>
+    </ng-template>
+
+    <div class="table-card">
+    @defer (on viewport) {
+    <app-user-table [users]="filteredUsers()" (userSelected)="onUserSelected($event)" [rowTemplate]="customRow">
+        <tr table-header #tableHeader>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+        </tr>
+    </app-user-table>
+    } @placeholder {
+    <p class="text-muted">Preparando tabla...</p>
+    } @loading (minimum 300ms) {
+    <p class="text-muted">Cargando tabla...</p>
+    } @error {
+    <p class="error">Error al cargar la tabla.</p>
+    }
+    </div>
+    }
+
+    @if (selectedUser(); as user) {
+    <div class="detail-panel">
+        <h3>Detalle del usuario</h3>
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Rol:</strong> {{ user.role | roleLabel }}</p>
+        <p><strong>Estado:</strong> {{ user.isActive ? 'Activo' : 'Inactivo' }}</p>
+        <p><strong>Creado:</strong> {{ user.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+        <button (click)="selectedUser.set(null)">Cerrar</button>
+    </div>
+    }
+
+</div>

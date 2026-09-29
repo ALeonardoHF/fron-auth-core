@@ -1,0 +1,50 @@
+<div class="container">
+  <h2>Dashboard</h2>
+
+  @if (user(); as user) {
+  <div class="card">
+    <p [innerHTML]="welcomeHtml"></p>
+  </div>
+
+  <div class="card">
+    <p><strong>Hora actual:</strong> {{ currentTime$ | async }}</p>
+  </div>
+
+  <div class="card">
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Rol:</strong> {{ user.role | roleLabel }}</p>
+    <p><strong>Último login:</strong> {{ user.lastLogin ?? 'N/A' }}</p>
+  </div>
+
+  <div class="card">
+    <p><strong>Autenticación de dos factores</strong></p>
+    @if (user.isTwoFactorEnabled) {
+    <p>2FA está activo.</p>
+    <button (click)="openDisableModal()">Desactivar 2FA</button>
+    } @else {
+    <p>2FA no está activo.</p>
+    <a routerLink="/auth/2fa/setup">Activar aquí</a>
+    }
+  </div>
+
+
+
+  }
+
+  <div class="nav-actions">
+    <a href="/admin/users" (click)="goToUsers(); $event.preventDefault()" *appIfRole="'Admin'" class="nav-btn">Ver usuarios</a>
+    <a routerLink="/profile" class="nav-btn">Mi perfil</a>
+  </div>
+
+  <div class="logout-actions">
+    <button class="secondary" (click)="logout()">Cerrar sesión</button>
+    <button class="secondary danger-text" (click)="logoutAll()">Cerrar sesión en todos los dispositivos</button>
+  </div>
+
+  @if (notificationService.current$ | async; as notif) {
+  <div [class]="'notification ' + notif.type">
+    {{ notif.message }}
+  </div>
+  }
+
+</div>

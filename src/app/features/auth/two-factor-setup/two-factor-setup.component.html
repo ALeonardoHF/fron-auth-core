@@ -1,0 +1,36 @@
+<div class="container">
+  <h2>Activar autenticación de dos factores</h2>
+
+  @if (loading()) {
+    <p>Generando QR...</p>
+  } @else if (errorMsg()) {
+    <p class="error">{{ errorMsg() }}</p>
+  } @else if (enabled()) {
+    <p class="success">✓ 2FA activado correctamente. Ya puedes cerrar sesión y probar.</p>
+    <a routerLink="/dashboard">← Volver al dashboard</a>
+  } @else {
+    <p>1. Escanea el QR con Google Authenticator:</p>
+    <img [src]="'data:image/png;base64,' + setup()!.qrCodeBase64" alt="QR Code 2FA" />
+
+    <p>¿No puedes escanear? Usa este código manual:</p>
+    <code>{{ setup()!.manualCode }}</code>
+
+    <p>2. Ingresa el código de 6 dígitos que aparece en tu app para confirmar:</p>
+    <form [formGroup]="form" (ngSubmit)="confirm()">
+      <div class="field">
+        <input type="text" formControlName="code" placeholder="000000" maxlength="6" />
+        @if (form.get('code')?.invalid && form.get('code')?.touched) {
+          <span class="error">El código debe tener 6 dígitos</span>
+        }
+      </div>
+      @if (enableError()) {
+        <p class="error">{{ enableError() }}</p>
+      }
+      <button type="submit" [disabled]="enabling()">
+        {{ enabling() ? 'Verificando...' : 'Confirmar activación' }}
+      </button>
+    </form>
+
+    <a routerLink="/dashboard">← Volver al dashboard</a>
+  }
+</div>

@@ -1,0 +1,54 @@
+<div class="container">
+  <h2>Mi perfil</h2>
+  <a routerLink="/dashboard">← Volver</a>
+
+  @if (user(); as u) {
+    <div class="card">
+      <p><strong>Email:</strong> {{ u.email }}</p>
+      <p><strong>Rol:</strong> {{ u.role | roleLabel }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Información general</h3>
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+        <div class="field">
+          <label>Nombre de display</label>
+          <input type="text" formControlName="displayName" placeholder="Tu nombre" />
+          @if (profileForm.get('displayName')?.invalid && profileForm.get('displayName')?.touched) {
+            <span class="error">Campo requerido</span>
+          }
+        </div>
+        @if (profileSaved()) { <p class="success">Guardado correctamente.</p> }
+        @if (profileError()) { <p class="error">{{ profileError() }}</p> }
+        <button type="submit">Guardar</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Cambiar contraseña</h3>
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+        <div class="field">
+          <label>Contraseña actual</label>
+          <input type="password" formControlName="currentPassword" />
+        </div>
+        <div class="field">
+          <label>Nueva contraseña</label>
+          <input type="password" formControlName="newPassword" />
+          @if (passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched) {
+            <span class="error">Mínimo 8 caracteres</span>
+          }
+        </div>
+        <div class="field">
+          <label>Confirmar nueva contraseña</label>
+          <input type="password" formControlName="confirmPassword" />
+          @if (passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmPassword')?.touched) {
+            <span class="error">Las contraseñas no coinciden</span>
+          }
+        </div>
+        @if (passwordSaved()) { <p class="success">Contraseña actualizada.</p> }
+        @if (passwordError()) { <p class="error">{{ passwordError() }}</p> }
+        <button type="submit">Cambiar contraseña</button>
+      </form>
+    </div>
+  }
+</div>

@@ -1,0 +1,23 @@
+<div class="container">
+  <h2>Confirmar recuperación</h2>
+  @if (success()) {
+    <p>2FA desactivado. Ya puedes iniciar sesión normalmente.</p>
+    <a routerLink="/auth/login">Ir al login</a>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field">
+        <label>Contraseña actual</label>
+        <input type="password" formControlName="password" placeholder="********" />
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <span class="error">Mínimo 8 caracteres</span>
+        }
+      </div>
+      @if (errorMsg()) {
+        <p class="error">{{ errorMsg() }}</p>
+      }
+      <button type="submit" [disabled]="loading()">
+        {{ loading() ? 'Procesando...' : 'Deshabilitar 2FA' }}
+      </button>
+    </form>
+  }
+</div>

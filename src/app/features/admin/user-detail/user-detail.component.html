@@ -1,0 +1,19 @@
+<div class="container">
+    <h2>Detalle de usuario</h2>
+    <a routerLink="/admin/users">← Volver</a>
+
+    @if (loading()) {
+    <p>Cargando...</p>
+    } @else if (errorMsg()) {
+    <p class="error">{{ errorMsg() }}</p>
+    } @else {
+    <div class="card">
+        <p><strong>ID:</strong> {{ user()!.id }}</p>
+        <p><strong>Email:</strong> {{ user()!.email }}</p>
+        <p><strong>Rol:</strong> {{ user()!.role | roleLabel }}</p>
+        <p><strong>Estado:</strong> {{ user()!.isActive ? 'Activo' : 'Inactivo' }}</p>
+        <p><strong>Creado:</strong> {{ user()!.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+    </div>
+    }
+
+</div>

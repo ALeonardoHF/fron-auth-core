@@ -1,0 +1,29 @@
+<div class="container">
+    <h2>Verificación de dos factores</h2>
+    <p>Ingresa el código enviado a <strong>{{ email() }}</strong></p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <div class="field">
+            <label>Código de 6 dígitos</label>
+            <!-- <input #codeInput type="text" formControlName="code" placeholder="000000" maxlength="6" /> -->
+            <app-totp-input #codeInput formControlName="code" />
+
+            @if (form.get('code')?.invalid && form.get('code')?.touched) {
+                <span class="error">El código debe tener 6 dígitos</span>
+            }
+        </div>
+
+        @if (errorMsg()) {
+            <p class="error">{{ errorMsg() }}</p>
+        }
+
+        <button type="submit" [appLoadingButton]="loading()">
+            {{ loading() ? 'Verificando...' : 'Verificar' }}
+        </button>
+    </form>
+
+    <p><a routerLink="/auth/login">Volver al login</a></p>
+
+    <p><a routerLink="/auth/2fa/recovery">¿Perdiste acceso a tu autenticador?</a></p>
+</div>
